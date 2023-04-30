@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {
   ViroARScene,
   ViroText,
-  ViroConstants,
+  ViroTrackingStateConstants,
   ViroARSceneNavigator,
 } from '@viro-community/react-viro';
 
