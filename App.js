@@ -7,6 +7,7 @@ import {
     ViroARSceneNavigator,
 } from '@viro-community/react-viro';
 import ARMainScene from './src/ARMainScene';
+import GPSUtil from './src/GPSUtil';
 
 export default class App extends Component {
     constructor(props) {
@@ -17,26 +18,17 @@ export default class App extends Component {
         };
         this._navigator = undefined;
         this.photo = "";
-    }
-    render() {
-        return (
-            <View style={styles.flex1}>
-                <ViroARSceneNavigator
-                    style={styles.flex1}
-                    autofocus={true}
-                    ref={this._setNavigatorRef}
-                    initialScene={{ scene: ARMainScene }}
-                    viroAppProps={this.state}
-                />
-                <Button
-                    styles={styles.absol}
-                    onPress={this._onButtonClick}
-                    title="탐색"
-                />
-            </View>
-        )
+        this.gps = new GPSUtil();
+        
     }
 
+    componentDidMount() {
+        this.gps.Start();
+    }
+
+    componentWillUnmount() {
+        this.gps.Clear();
+    }
     _setNavigatorRef = (navigator) => {
         this._navigator = navigator;
     };
@@ -55,6 +47,12 @@ export default class App extends Component {
         }
     };
     _onButtonClick = async () => {
+        if (!this.gps.Availbale) {
+            console.log("아직 준비가 되지 않았음.");
+            return;
+        }
+        console.log(this.gps.Get());
+
         /* 
         1. 모든 ar 컴포넌트를 감춘다.
         2. 사진을 찍는다.
@@ -64,6 +62,24 @@ export default class App extends Component {
         */
 
     };
+    render() {
+        return (
+            <View style={styles.flex1}>
+                <ViroARSceneNavigator
+                    style={styles.flex1}
+                    autofocus={true}
+                    ref={this._setNavigatorRef}
+                    initialScene={{ scene: ARMainScene }}
+                    viroAppProps={this.state}
+                />
+                <Button
+                    styles={styles.absol}
+                    onPress={this._onButtonClick}
+                    title="탐색"
+                />
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
