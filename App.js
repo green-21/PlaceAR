@@ -1,55 +1,53 @@
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
+'use strict'
+
+import React, {Component} from 'react';
+import { StyleSheet, View, Button } from 'react-native';
 import {
-  ViroARScene,
-  ViroText,
-  ViroTrackingStateConstants,
-  ViroARSceneNavigator,
+    ViroTrackingStateConstants,
+    ViroARSceneNavigator,
 } from '@viro-community/react-viro';
+import ARMainScene from './src/ARMainScene';
 
-const HelloWorldSceneAR = () => {
-  const [text, setText] = useState('Initializing AR...');
-
-  function onInitialized(state, reason) {
-    console.log('guncelleme', state, reason);
-    if (state === ViroConstants.TRACKING_NORMAL) {
-      setText('Hello World!');
-    } else if (state === ViroConstants.TRACKING_NONE) {
-      // Handle loss of tracking
+export default class App extends Component {
+    constructor(props) {
+        super(props);
+        this.host = "http://localhost:8080";
+        this.state = {};
     }
-  }
+    render() {
+        return (
+            <View style={styles.flex1}>
+                <ViroARSceneNavigator
+                    style={styles.flex1}
+                    autofocus={true}
+                    ref={this._setNavigatorRef}
+                    initialScene={{ scene: ARMainScene }}
+                    viroAppProps={this.state}
+                />
+                <Button
+                    styles= {styles.absol}
+                    onPress={this._onButtonClick}
+                    title="탐색"
+                />
+            </View>
+        )
+    }
+    _takePhoto = () => {
+        
+    }
+    _onButtonClick = () => {
+        /* 
+        1. 모든 ar 컴포넌트를 감춘다.
+        2. 사진을 찍는다.
+        3. ar 컴포넌트를 띄운다.
+        4. 사진을 전송한다.
+        5.  
+        */
 
-  return (
-    <ViroARScene onTrackingUpdated={onInitialized}>
-      <ViroText
-        text={text}
-        scale={[0.5, 0.5, 0.5]}
-        position={[0, 0, -1]}
-        style={styles.helloWorldTextStyle}
-      />
-    </ViroARScene>
-  );
-};
+    }
+}
 
-export default () => {
-  return (
-    <ViroARSceneNavigator
-      autofocus={true}
-      initialScene={{
-        scene: HelloWorldSceneAR,
-      }}
-      style={styles.f1}
-    />
-  );
-};
-
-var styles = StyleSheet.create({
-  f1: {flex: 1},
-  helloWorldTextStyle: {
-    fontFamily: 'Arial',
-    fontSize: 30,
-    color: '#ffffff',
-    textAlignVertical: 'center',
-    textAlign: 'center',
-  },
-});
+const styles = StyleSheet.create({
+    flex1: {flex:1},
+    absol: {position: "absolute"},
+})
