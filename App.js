@@ -1,6 +1,6 @@
 'use strict'
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import {
     ViroTrackingStateConstants,
@@ -12,7 +12,11 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.host = "http://localhost:8080";
-        this.state = {};
+        this.state = {
+            isDisabled: false,
+        };
+        this._navigator = undefined;
+        this.photo = "";
     }
     render() {
         return (
@@ -25,17 +29,32 @@ export default class App extends Component {
                     viroAppProps={this.state}
                 />
                 <Button
-                    styles= {styles.absol}
+                    styles={styles.absol}
                     onPress={this._onButtonClick}
                     title="탐색"
                 />
             </View>
         )
     }
-    _takePhoto = () => {
-        
-    }
-    _onButtonClick = () => {
+
+    _setNavigatorRef = (navigator) => {
+        this._navigator = navigator;
+    };
+
+    _takePhoto = async () => {
+        try {
+            await new Promise(resolve => { this.setState({ isDisabled: true }, resolve) });
+            const result = await this._navigator._takeScreenshot('photh.jpg', false);
+            this.setState({ isDisabled: false });
+            if (result.success) {
+                this.photo = result.url;
+                console.log(result.url);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    _onButtonClick = async () => {
         /* 
         1. 모든 ar 컴포넌트를 감춘다.
         2. 사진을 찍는다.
@@ -44,10 +63,10 @@ export default class App extends Component {
         5.  
         */
 
-    }
+    };
 }
 
 const styles = StyleSheet.create({
-    flex1: {flex:1},
-    absol: {position: "absolute"},
+    flex1: { flex: 1 },
+    absol: { position: "absolute" },
 })
