@@ -4,9 +4,11 @@ AR 기반의 주변 장소 검색 앱
 
 # Setting
 ## Android 빌드 시 설정 요소
-Android의 경우 ./android/(App)/build.gradle 파일에서 react-native의 버전을 0.65.1로 고정해야 한다.
+Android의 경우 `./android/(App)/build.gradle` 파일에서 react-native의 버전을 `0.65.1`로 고정해야 한다.
 일부 패키지의 경우 패키지에서 build.gradle이 존재해 이 경우도 버전을 고정시켜 줘야 한다.
 
+   1. main app의 gradle.build 변경
+   2. react-native-geolocation-service 모듈의 gradle.build 버전 변경
 
 ## Vscode 빌드 세팅 방법
 1. 확장으로 React Native 툴을 설치한다.
