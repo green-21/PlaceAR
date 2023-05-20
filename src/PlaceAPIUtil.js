@@ -6,7 +6,7 @@ const URI = {
 
 export default class PlaceAPIUtil {
     constructor(host = "localhost:8080", imageURL = '', lat = 0, lng = 0) {
-        this.host = "http://" + host;
+        this.host = host;
         this.image = {
             uri: imageURL,
             name: "photo.jpg",
@@ -26,7 +26,8 @@ export default class PlaceAPIUtil {
         body.append('image', this.image);
         body.append('lat', this.lat);
         body.append('lng', this.lng);
-        const uri = this.host + URI.getplace;
+        const uri = "http://" + this.host + URI.getplace;
+        console.log(uri);
         const res = await fetch(uri, {
             method: "POST",
             headers: {
