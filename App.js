@@ -15,7 +15,8 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isDisabled: false,
+            isARVisible: true,
+            isProcessing: false,
             places: new Map(),
             host: "192.168.0.25:8080"
         };
@@ -37,7 +38,12 @@ export default class App extends Component {
     };
 
     _takePhoto = async () => {
-        await new Promise(resolve => { this.setState({ isDisabled: true }, resolve) });
+        await new Promise(resolve => {
+            this.setState({
+                isARVisible: false,
+                isProcessing: true,
+            }, resolve)
+        });
         const result = await this._navigator._takeScreenshot('photo', false);
         this.setState({ isDisabled: false });
         if (result.success) {
@@ -63,20 +69,15 @@ export default class App extends Component {
             if (!data) {
                 console.log('[버튼] 인식에 실패해 인접 장소를 검색함');
                 data = await this.placeAPI.GetPlaceList();
-                this._appendPlaces(data);
-                return
+            } else {
+                console.log('[버튼] Place를 얻었음');
+                this._appendPlace(data);
             }
-            console.log('[버튼] Place를 얻었음');
-            this._appendPlace(data);
         } catch (err) {
             console.log('[버튼] 모종의 이유로 실패함.', err);
+        } finally {
+            this.setState({isProcessing: false,})
         }
-        /*
-            1. 모든 ar 컴포넌트를 감춘다.
-            2. 사진을 찍는다.
-            3. ar 컴포넌트를 띄운다.
-            4. 사진을 전송한다.
-        */
     };
 
     _appendPlace = (place) => {
@@ -103,12 +104,13 @@ export default class App extends Component {
                     viroAppProps={this.state}
                 />
                 <TextInput
-                    value= { this.state.host }
-                    onChangeText={ (text) => this.setState({host:text})}
+                    value={this.state.host}
+                    onChangeText={(text) => this.setState({ host: text })}
                 />
                 <Button
                     styles={styles.absol}
                     onPress={this._onButtonClick}
+                    disabled={this.state.isProcessing}
                     title="탐색"
                 />
             </View>
