@@ -6,7 +6,6 @@ import {
     ViroText,
     ViroNode,
     ViroImage,
-    ViroTrackingStateConstants,
     ViroFlexView
 } from '@viro-community/react-viro';
 
@@ -27,14 +26,14 @@ export default class ARPlaceInfoMarker extends Component {
 
     render() {
         return (
-            <ViroNode>
+            <ViroNode position={this.props.position}>
                 <ViroNode>
                     <ViroFlexView style={styles.Container} position={[0, 2, 0]} width={5} height={1.5}>
                         <ViroFlexView style={styles.TitleBox} >
-                            <ViroText style={styles.TitleText} text={this.props.name} width={1.5} />
+                            <ViroText style={styles.TitleText} text={this.props.name} width={1} />
                         </ViroFlexView>
                         <ViroFlexView style={styles.ContentBox}>
-                            <ViroText style={styles.ContentText} text={this.props.score} width={1} />
+                            <ViroText style={styles.ContentText} text={this.props.rating} width={1} />
                             <ViroText style={styles.ContentText} text={this.props.isOpen} width={1} />
                         </ViroFlexView>
                     </ViroFlexView>

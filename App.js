@@ -18,7 +18,7 @@ export default class App extends Component {
             isARVisible: true,
             isProcessing: false,
             places: new Map(),
-            host: "192.168.0.25:8080"
+            host: "192.168.0.2:8080"
         };
         this.placeAPI = new PlaceAPIUtil();
         this._navigator = undefined;
@@ -76,6 +76,8 @@ export default class App extends Component {
         } catch (err) {
             console.log('[버튼] 모종의 이유로 실패함.', err);
         } finally {
+
+            console.log("모든 작업이 완료되었음")
             this.setState({isProcessing: false,})
         }
     };

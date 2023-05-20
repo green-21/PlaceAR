@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component } from "react";
-import { ViroARScene } from "@viro-community/react-viro";
+import { ViroARScene, ViroText, ViroButton } from "@viro-community/react-viro";
 import ARPlaceInfoMarker from "./ARPlaceInfoMarker";
 
 
@@ -9,25 +9,29 @@ export default class ARMainScene extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            markers: [],
+            places: this.props.sceneNavigator.viroAppProps.places,
         }
-    }
-
-    newMarker = (data) => {
-        this.setState((prev) => {
-            markers: [...prev.markers, data]
-        })
+        console.log(this.state.places);
     }
     render() {
         return (
             <ViroARScene>
-                {this.state.markers.map((data, index) => (
-                    <ARPlaceInfoMarker
-                        name={data.name}
-                        score={data.score}
-                        isOpen={data.isOpen}></ARPlaceInfoMarker>
-                ))}
+                {
+                    Array.from(this.state.places.values()).map((data, index) => {
+                        console.log(data);
+                        return (
+                            <ARPlaceInfoMarker
+                                position={[0, 0, -10]}
+                                key={data.place_id}
+                                name={data.name}
+                                rating={`${data.rating}`}
+                            />
+                        )
+                    })
+
+                }
             </ViroARScene>
         )
     }
 }
+
