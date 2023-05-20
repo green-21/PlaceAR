@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Button, TextInput } from 'react-native';
 import {
     ViroTrackingStateConstants,
     ViroARSceneNavigator,
@@ -14,11 +14,12 @@ import PlaceAPIUtil from './src/PlaceAPIUtil';
 export default class App extends Component {
     constructor(props) {
         super(props);
-        this.placeAPI = new PlaceAPIUtil("192.168.0.25:8080");
         this.state = {
             isDisabled: false,
             places: new Map(),
+            host: "192.168.0.25:8080"
         };
+        this.placeAPI = new PlaceAPIUtil();
         this._navigator = undefined;
         this.gps = new GPSUtil();
     }
@@ -51,6 +52,7 @@ export default class App extends Component {
             return;
         }
         try {
+            this.placeAPI.host = this.state.host;
             console.log("[버튼] 이벤트 실행");
             const gps = this.gps.Get();
             console.log('[버튼] gps를 얻었음 :', gps);
@@ -99,6 +101,10 @@ export default class App extends Component {
                     ref={this._setNavigatorRef}
                     initialScene={{ scene: ARMainScene }}
                     viroAppProps={this.state}
+                />
+                <TextInput
+                    value= { this.state.host }
+                    onChangeText={ (text) => this.setState({host:text})}
                 />
                 <Button
                     styles={styles.absol}
