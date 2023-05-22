@@ -25,8 +25,10 @@ export default class ARPlaceInfoMarker extends Component {
     };
 
     render() {
+        const clickEvent = this.props.clickEvent;
+        console.log('clickEvent를 보자 :', clickEvent)
         return (
-            <ViroNode position={this.props.position}>
+            <ViroNode position={this.props.position} onClick={clickEvent}>
                 <ViroNode>
                     <ViroFlexView style={styles.Container} position={[0, 2, 0]} width={5} height={1.5}>
                         <ViroFlexView style={styles.TitleBox} >

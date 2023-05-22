@@ -14,6 +14,7 @@ export default class ARMainScene extends Component {
         console.log(this.state.places);
     }
     render() {
+        const selectPlace = this.props.sceneNavigator.viroAppProps.openDetailView;
         return (
             <ViroARScene>
                 {
@@ -21,10 +22,11 @@ export default class ARMainScene extends Component {
                         console.log(data);
                         return (
                             <ARPlaceInfoMarker
-                                position={[0, 0, -10]}
+                                position={[0, -3, -10]}
                                 key={data.place_id}
                                 name={data.name}
                                 rating={`${data.rating}`}
+                                clickEvent={()=> {selectPlace(data.place_id)}}
                             />
                         )
                     })

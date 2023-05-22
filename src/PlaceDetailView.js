@@ -10,18 +10,19 @@ export default class PlaceDetailView extends Component {
     }
     render() {
         const { modalVisible, closeModal, place } = this.props;
+        console.log("place :", place);
         return (
             <Modal visible={modalVisible}
                 animationType='slide'
                 presentationStyle='overFullScreen'
                 transparent={true}
             >
-                <Pressable 
+                <Pressable
                     style={styles.paddingSpace}
                     onPress={closeModal}
                 />
                 <View style={styles.modal}>
-                    <Text>Hello World!</Text>
+                    <Text>{place.name}</Text>
 
                     <Button
                         title="Hide Modal"

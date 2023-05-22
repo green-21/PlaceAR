@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Button, TextInput} from 'react-native';
+import { StyleSheet, View, Button, TextInput } from 'react-native';
 import {
     ViroTrackingStateConstants,
     ViroARSceneNavigator,
@@ -19,8 +19,18 @@ export default class App extends Component {
             isProcessing: false,
             places: new Map(),
             host: "192.168.0.2:8080",
+            
             modalVisible: false,
-            selectedPlace: undefined,
+            selectedPlace: {},
+
+            openDetailView: (placeID) => {
+                console.log("placeID : ", placeID);
+                console.log("place list :", this.state.places);
+                this.setState({ 
+                    selectedPlace: this.state.places.get(placeID),
+                    modalVisible: true,
+                });
+            },
         };
         this.placeAPI = new PlaceAPIUtil();
         this._navigator = undefined;
@@ -37,6 +47,7 @@ export default class App extends Component {
 
     _setNavigatorRef = (navigator) => {
         this._navigator = navigator;
+        this._natigator = this.selectPlace
     };
 
     _takePhoto = async () => {
@@ -55,8 +66,6 @@ export default class App extends Component {
     };
 
     _onButtonClick = async () => {
-        this.setState({modalVisible: true})
-        return;
         if (!this.gps.Availbale) {
             console.log("아직 준비가 되지 않았음.");
             return;
@@ -99,21 +108,17 @@ export default class App extends Component {
     _appendPlaces = (data) => {
 
     }
-    
-    selectPlace = (placeID) => {
-        this.setState({ selectedPlace: this.state.places[placeID] })
-    }
-    
+
     render() {
         return (
             <View style={styles.flex1}>
-                {/* <ViroARSceneNavigator
+                <ViroARSceneNavigator
                     style={styles.flex1}
                     autofocus={true}
                     ref={this._setNavigatorRef}
                     initialScene={{ scene: ARMainScene }}
                     viroAppProps={this.state}
-                /> */}
+                />
                 <TextInput
                     value={this.state.host}
                     onChangeText={(text) => this.setState({ host: text })}
@@ -124,13 +129,17 @@ export default class App extends Component {
                     disabled={this.state.isProcessing}
                     title="탐색"
                 />
-                <PlaceDetailView modalVisible={this.state.modalVisible} closeModal={() => {this.setState({modalVisible: false})}}/>
+                <PlaceDetailView
+                    modalVisible={this.state.modalVisible}
+                    closeModal={() => { this.setState({ modalVisible: false }) }}
+                    place={this.state.selectedPlace}
+                />
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    flex1: { flex: 1, backgroundColor: '#111' },
+    flex1: { flex: 1 },
     absol: { position: "absolute" },
 })
