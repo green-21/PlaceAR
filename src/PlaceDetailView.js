@@ -29,7 +29,6 @@ export default class PlaceDetailView extends Component {
     }
     render() {
         const { modalVisible, closeModal, place } = this.props;
-        console.log("place :", place);
         return (
             <Modal visible={modalVisible}
                 animationType='slide'

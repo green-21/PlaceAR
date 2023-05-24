@@ -6,6 +6,7 @@ import {
     ViroTrackingStateConstants,
     ViroARSceneNavigator,
 } from '@viro-community/react-viro';
+import CompassHeading from 'react-native-compass-heading';
 
 import ARMainScene from './src/ARMainScene';
 import GPSUtil from './src/GPSUtil';
@@ -19,14 +20,14 @@ export default class App extends Component {
             isProcessing: false,
             places: new Map(),
             host: "192.168.0.2:8080",//"hsj3925.iptime.org:8080",
-            
+            gps: new GPSUtil(),
+
             modalVisible: false,
             selectedPlace: {},
-
+            heading: 0,
             openDetailView: (placeID) => {
-                console.log("placeID : ", placeID);
-                console.log("place list :", this.state.places);
-                this.setState({ 
+                console.log(`[정보] detailView 요청이 들어왔음. ${placeID}`)
+                this.setState({
                     selectedPlace: this.state.places.get(placeID),
                     modalVisible: true,
                 });
@@ -34,15 +35,24 @@ export default class App extends Component {
         };
         this.placeAPI = new PlaceAPIUtil();
         this._navigator = undefined;
-        this.gps = new GPSUtil();
     }
 
     componentDidMount() {
-        this.gps.Start();
+        this.state.gps.Start();
+
+        CompassHeading.start(3, (heading) => {
+            let diff = Math.abs(heading.heading - this.state.heading);
+            if (diff > 180) {
+                diff = 360 - diff;
+            }
+            if (diff < 90) { return ;}
+            this.setState({ heading: heading.heading });
+        });
     }
 
     componentWillUnmount() {
-        this.gps.Clear();
+        this.state.gps.Clear();
+        CompassHeading.stop();
     }
 
     _setNavigatorRef = (navigator) => {
@@ -66,14 +76,14 @@ export default class App extends Component {
     };
 
     _onButtonClick = async () => {
-        if (!this.gps.Availbale) {
+        if (!this.state.gps.Availbale) {
             console.log("아직 준비가 되지 않았음.");
             return;
         }
         try {
             this.placeAPI.host = this.state.host;
             console.log("[버튼] 이벤트 실행");
-            const gps = this.gps.Get();
+            const gps = this.state.gps.Get();
             console.log('[버튼] gps를 얻었음 :', gps);
             const imageURL = await this._takePhoto();
             console.log('[버튼] 사진을 얻었음 :', imageURL);
@@ -90,31 +100,41 @@ export default class App extends Component {
                 this._appendPlace(data);
             }
         } catch (err) {
-            console.log('[버튼] 모종의 이유로 실패함.', err);
+            console.log('[버튼] place 요청 실패 :', err);
         } finally {
 
             console.log("모든 작업이 완료되었음")
-            this.setState({ isProcessing: false, })
+            this.setState({ 
+                isARVisible: true,
+                isProcessing: false,
+            })
         }
-    }; 
+    };
 
     _appendPlace = (place) => {
-        this.setState((prev) => {
-            // const newPlaces = new Map();
-            prev.places.set(place.place_id, place);
-            return { places: prev.places, }
-        }, () => {
-            console.log("플레이스가 추가 되었음 !!", place.place_id);
-        })
+        if (!this.state.places.has(place)) {
+            this.setState((prev) => {
+                prev.places.set(place.place_id, place);
+                return { places: prev.places, }
+            }, () => {
+                console.log("플레이스가 추가 되었음 !!", place.place_id);
+            })
+        }
     }
 
     _appendPlaces = (places) => {
-        this.setState((prev) => {
-            for(const place of places) {
-                prev.places.set(place.place_id, place);
+        let count = 0;
+        for (const place of places) {
+            if (!this.state.places.has(place.place_id)) {
+                this.state.places.set(place.place_id, place);
+                count++;
             }
-            return {places: prev.places}
-        }, () => {console.log(`${places.length} 개의 플레이스 데이터를 응답 받았음`)})
+        }
+        if (count > 0) {
+            this.setState((prev) => { places: prev }
+                , () => { console.log(`${count} 개의 플레이스 데이터가 추가되었음`) })
+        }
+
     }
 
     render() {
@@ -127,7 +147,7 @@ export default class App extends Component {
                     initialScene={{ scene: ARMainScene }}
                     viroAppProps={this.state}
                 />
-                <TextInput 
+                <TextInput
                     value={this.state.host}
                     onChangeText={(text) => this.setState({ host: text })}
                 />
