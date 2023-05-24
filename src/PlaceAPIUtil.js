@@ -35,7 +35,7 @@ export default class PlaceAPIUtil {
             },
             body: body,
         });
-
+        console.log(res.ok);
         if (!res.ok) {
             return null;
         }
@@ -46,15 +46,16 @@ export default class PlaceAPIUtil {
         const body = new FormData();
         body.append('lat', this.lat);
         body.append('lng', this.lng);
-
-        const res = await fetch(this.host + URI.getplacelist, {
+        const uri = "http://" + this.host + URI.getplacelist;
+        console.log(uri);
+        const res = await fetch(uri, {
             method: 'POST',
             headers: {
                 "Content-Type": "multipart/form-data",
             },
             body: body,
         });
-
+        
         if (!res.ok) {
             return {};
         }

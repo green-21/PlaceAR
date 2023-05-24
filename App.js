@@ -18,7 +18,7 @@ export default class App extends Component {
             isARVisible: true,
             isProcessing: false,
             places: new Map(),
-            host: "192.168.0.2:8080",
+            host: "192.168.0.2:8080",//"hsj3925.iptime.org:8080",
             
             modalVisible: false,
             selectedPlace: {},
@@ -79,9 +79,12 @@ export default class App extends Component {
             console.log('[버튼] 사진을 얻었음 :', imageURL);
             this.placeAPI.SetData(imageURL, gps.lat, gps.lng);
             let data = await this.placeAPI.GetPlace();
+            // let data = await this.placeAPI.GetPlaceList();
+
             if (!data) {
                 console.log('[버튼] 인식에 실패해 인접 장소를 검색함');
                 data = await this.placeAPI.GetPlaceList();
+                this._appendPlaces(data);
             } else {
                 console.log('[버튼] Place를 얻었음');
                 this._appendPlace(data);
@@ -93,7 +96,7 @@ export default class App extends Component {
             console.log("모든 작업이 완료되었음")
             this.setState({ isProcessing: false, })
         }
-    };
+    }; 
 
     _appendPlace = (place) => {
         this.setState((prev) => {
@@ -105,8 +108,13 @@ export default class App extends Component {
         })
     }
 
-    _appendPlaces = (data) => {
-
+    _appendPlaces = (places) => {
+        this.setState((prev) => {
+            for(const place of places) {
+                prev.places.set(place.place_id, place);
+            }
+            return {places: prev.places}
+        }, () => {console.log(`${places.length} 개의 플레이스 데이터를 응답 받았음`)})
     }
 
     render() {
@@ -119,7 +127,7 @@ export default class App extends Component {
                     initialScene={{ scene: ARMainScene }}
                     viroAppProps={this.state}
                 />
-                <TextInput
+                <TextInput 
                     value={this.state.host}
                     onChangeText={(text) => this.setState({ host: text })}
                 />
