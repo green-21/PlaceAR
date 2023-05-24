@@ -35,8 +35,9 @@ export default class ARPlaceInfoMarker extends Component {
                             <ViroText style={styles.TitleText} text={this.props.name} width={1} />
                         </ViroFlexView>
                         <ViroFlexView style={styles.ContentBox}>
-                            <ViroText style={styles.ContentText} text={this.props.rating} width={1} />
-                            <ViroText style={styles.ContentText} text={this.props.isOpen} width={1} />
+                            <ViroImage source={require('../res/icon/star-full.png')} style={styles.StarIcon} scale={[1,1,1]} />
+                            <ViroText style={styles.ContentText} text={`${this.props.rating} / 5.0`} width={1.5} />
+                            <ViroText style={styles.ContentText} text={"영업중"} width={1} />
                         </ViroFlexView>
                     </ViroFlexView>
                 </ViroNode>
@@ -55,11 +56,15 @@ const styles = StyleSheet.create({
         fontSize: 50,
         color: '#111111',
         textAlignVertical: "center",
-        flexShrink:1,
-        fontWeight:"bold",
+        flexShrink: 1,
+        fontWeight: "bold",
 
         // textAlignVertical: 'center',
         // textAlign: 'center',
+    },
+    StarIcon: {
+        width: 0.3,
+        height: 0.3,
     },
     ContentText: {
         fontFamily: "Roboto, SamsungKorean, NotoSansCJK",
@@ -69,19 +74,23 @@ const styles = StyleSheet.create({
     Container: {
         backgroundColor: "#ffffffdd",
         flexDirection: "column",
-        // padding: .01,
+        flexWrap: 'wrap',
+        // justifyContent: 'center',
+        padding: .2,
         // flexShrink: 2,
     },
     TitleBox: {
-        flex:1,
+        flex: 1,
         // backgroundColor: "#ff0000",
         flexDirection: "row",
-        flexShrink:1,
+        flexShrink: 1,
     },
-    ContentBox:{
-        flex:1,
+    ContentBox: {
+        flex: 1,
         // backgroundColor: "#00ff00",
-        flexDirection:"row",
-        flexShrink:1,
+        flexDirection: "row",
+        // flexShrink:1,
+        textAlignVertical: 'center',
+        alignContent: 'center',
     },
 });

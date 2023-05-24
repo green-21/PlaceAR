@@ -13,6 +13,7 @@ import {
     ScrollView, 
 } from 'react-native';
 
+// 아이콘 출처 : https://www.flaticon.com/kr/icon-fonts-most-downloaded
 const Icons = {
     "location": require('../res/icon/location.png'),
     "phone-full": require('../res/icon/phone-full.png'),
@@ -47,7 +48,7 @@ export default class PlaceDetailView extends Component {
                     <PlaceText res={Icons['star-full']} value={`${place.rating} / 5.0`} />
                     <PlaceText res={Icons['location']} value={place.address} />
                     <PlaceText res={Icons['phone-full']} value={place.number} />
-                    <PlaceText res={Icons['clock']} value={place.open_hour} />
+                    <PlaceText res={Icons['clock']} value={place.open_hours} />
                     <Button
                         title={"웹 사이트"}
                         onPress={() => { Linking.openURL(place.site) }}
