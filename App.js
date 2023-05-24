@@ -16,11 +16,14 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isInit: false,
             isARVisible: true,
             isProcessing: false,
             places: new Map(),
             host: "192.168.0.2:8080",//"hsj3925.iptime.org:8080",
-            gps: new GPSUtil(),
+            gps: new GPSUtil(() => {
+                this.setState({isInit: true,})
+            }),
 
             modalVisible: false,
             selectedPlace: {},
@@ -154,7 +157,7 @@ export default class App extends Component {
                 <Button
                     styles={styles.absol}
                     onPress={this._onButtonClick}
-                    disabled={this.state.isProcessing}
+                    disabled={this.state.isProcessing || !this.state.isInit}
                     title="탐색"
                 />
                 <PlaceDetailView

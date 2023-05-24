@@ -3,10 +3,11 @@
 import Geolocation from 'react-native-geolocation-service';
 
 export default class GPS {
-    constructor() {
+    constructor(callback) {
         this._gpsID = undefined;
         this._isInitialized = false;
         this._gps = {'lat': 0, 'lng':0};
+        this.callback = callback;
     }
 
     Start = () => {
@@ -17,6 +18,9 @@ export default class GPS {
             (result) => {
                 this._gps.lat = result.coords.latitude;
                 this._gps.lng = result.coords.longitude;
+                if(!this._isInitialized) {
+                    this.callback()
+                }
                 this._isInitialized = true;
             },
             (err) => console.log(err),
