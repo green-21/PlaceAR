@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component } from "react";
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet } from "react-native";
 import {
     ViroText,
     ViroNode,
@@ -20,21 +20,22 @@ export default class ARPlaceInfoMarker extends Component {
         super(props);
     }
     render() {
+        const { position, clickEvent, name, rating, visible } = this.props;
         return (
             <ViroNode 
-            position={this.props.position}
-            onClick={this.props.clickEvent}
+            position={position}
+            onClick={clickEvent}
             transformBehaviors={['billboardY']}
-            visible={this.props.visible}
+            visible={visible}
             >
                 <ViroNode >
                     <ViroFlexView style={styles.Container} position={[0, 2, 0]} width={5} height={1.5}>
                         <ViroFlexView style={styles.TitleBox} >
-                            <ViroText style={styles.TitleText} text={this.props.name} width={1} />
+                            <ViroText style={styles.TitleText} text={name} width={1} />
                         </ViroFlexView>
                         <ViroFlexView style={styles.ContentBox}>
                             <ViroImage source={require('../res/icon/star-full.png')} style={styles.StarIcon} scale={[1, 1, 1]} />
-                            <ViroText style={styles.ContentText} text={`${this.props.rating} / 5.0`} width={1.5} />
+                            <ViroText style={styles.ContentText} text={`${rating} / 5.0`} width={1.5} />
                             <ViroText style={styles.ContentText} text={"영업중"} width={1} />
                         </ViroFlexView>
                     </ViroFlexView>
