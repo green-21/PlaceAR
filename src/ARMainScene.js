@@ -62,10 +62,10 @@ export default class ARMainScene extends Component {
         this.lng = lng;
 
         const markers = [];
-        this.state.places.forEach((data, key) => {
+        for (const [key, data] of places) {
             let { x, z } = this.GpsToAR(data.lat, data.lng);
             // if(Math.abs(x) + Math.abs(z) > 100) {
-            //     return;
+            //     continue;
             // }
             if (z < 0 && z > -10) {
                 z -= 10 + z;
@@ -82,7 +82,7 @@ export default class ARMainScene extends Component {
                     visible={isARVisible}
                 />
             )
-        })
+        }
         return (
             <ViroARScene>
                 {markers}
