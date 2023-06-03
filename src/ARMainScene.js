@@ -13,6 +13,7 @@ export default class ARMainScene extends Component {
         }
         this.lat = 0;
         this.lng = 0;
+        this.heading = 0;
     }
 
     // from ViroCommunity/geoar
@@ -39,7 +40,7 @@ export default class ARMainScene extends Component {
         const objDeltaX = deviceObjPoint.x - mobilePoint.x;
 
         if (isAndroid) {
-            let degree = this.props.sceneNavigator.viroAppProps.heading;
+            let degree = this.heading;
             let angleRadian = (degree * Math.PI) / 180;
             let newObjX = objDeltaX * Math.cos(angleRadian) - objDeltaY * Math.sin(angleRadian);
             let newObjY = objDeltaX * Math.sin(angleRadian) + objDeltaY * Math.cos(angleRadian);
@@ -52,31 +53,34 @@ export default class ARMainScene extends Component {
 
     render() {
         const selectPlace = this.props.sceneNavigator.viroAppProps.openDetailView;
-        if (this.props.sceneNavigator.viroAppProps.gps.Availbale()) {
-            const { lat, lng } = this.props.sceneNavigator.viroAppProps.gps.Get();
-            this.lat = lat;
-            this.lng = lng;
-        }
+        const { places, gps, isARVisible } = this.props.sceneNavigator.viroAppProps;
+        const heading = this.props.sceneNavigator.viroAppProps.heading;
+        const { lat, lng } = gps.Availbale() ? gps.Get() : { lat: 0, lng: 0 };
+
+        this.heading = heading;
+        this.lat = lat;
+        this.lng = lng;
 
         const markers = [];
         this.state.places.forEach((data, key) => {
-            let {x,z} = this.GpsToAR(data.lat, data.lng);
-            if(Math.abs(x) + Math.abs(z) > 100) {
-                return;
+            let { x, z } = this.GpsToAR(data.lat, data.lng);
+            // if(Math.abs(x) + Math.abs(z) > 100) {
+            //     return;
+            // }
+            if (z < 0 && z > -10) {
+                z -= 10 + z;
             }
-            if (z < 0  && z > -10) {
-                 z -= 10+z;
-            }
+            x = 0, z = -10;
             console.log(`${data.name} : (${x}, ${z})`)
             markers.push(
                 <ARPlaceInfoMarker
-                position={[x, -1, z]}
-                key={data.place_id}
-                name={data.name}
-                rating={`${data.rating}`}
-                clickEvent={() => { selectPlace(data.place_id) }}
-                visible ={this.props.sceneNavigator.viroAppProps.isARVisible}
-            />
+                    position={[x, -1, z]}
+                    key={data.place_id}
+                    name={data.name}
+                    rating={`${data.rating}`}
+                    clickEvent={() => { selectPlace(data.place_id) }}
+                    visible={isARVisible}
+                />
             )
         })
         return (
