@@ -9,12 +9,6 @@ import {
     ViroFlexView
 } from '@viro-community/react-viro';
 
-
-/*
-name: placeName
-score: star score
-isOpen : 영업 여부
-*/
 export default class ARPlaceInfoMarker extends Component {
     constructor(props) {
         super(props);
@@ -57,9 +51,6 @@ const styles = StyleSheet.create({
         textAlignVertical: "center",
         flexShrink: 1,
         fontWeight: "bold",
-
-        // textAlignVertical: 'center',
-        // textAlign: 'center',
     },
     StarIcon: {
         width: 0.3,
@@ -74,21 +65,16 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffffdd",
         flexDirection: "column",
         flexWrap: 'wrap',
-        // justifyContent: 'center',
         padding: .2,
-        // flexShrink: 2,
     },
     TitleBox: {
         flex: 1,
-        // backgroundColor: "#ff0000",
         flexDirection: "row",
         flexShrink: 1,
     },
     ContentBox: {
         flex: 1,
-        // backgroundColor: "#00ff00",
         flexDirection: "row",
-        // flexShrink:1,
         textAlignVertical: 'center',
         alignContent: 'center',
     },

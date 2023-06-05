@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component } from "react";
-import { ViroARScene, ViroText, ViroButton } from "@viro-community/react-viro";
+import { ViroARScene } from "@viro-community/react-viro";
 import ARPlaceInfoMarker from "./ARPlaceInfoMarker";
 
 
@@ -45,7 +45,6 @@ export default class ARMainScene extends Component {
             let newObjX = objDeltaX * Math.cos(angleRadian) - objDeltaY * Math.sin(angleRadian);
             let newObjY = objDeltaX * Math.sin(angleRadian) + objDeltaY * Math.cos(angleRadian);
             return { x: newObjX, z: -newObjY };
-
         }
 
         return { x: objDeltaX, z: -objDeltaY };

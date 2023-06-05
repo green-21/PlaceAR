@@ -20,7 +20,7 @@ export default class App extends Component {
             isARVisible: true,
             isProcessing: false,
             places: new Map(),
-            host: "192.168.0.2:8080",//"hsj3925.iptime.org:8080",
+            host: "192.168.50.150:8080",//"hsj3925.iptime.org:8080",
             gps: new GPSUtil(() => {
                 this.setState({isInit: true,})
             }),
@@ -44,12 +44,13 @@ export default class App extends Component {
         this.state.gps.Start();
 
         CompassHeading.start(3, (heading) => {
-            let diff = Math.abs(heading.heading - this.state.heading);
-            if (diff > 180) {
-                diff = 360 - diff;
-            }
-            if (diff < 90) { return ;}
+            // let diff = Math.abs(heading.heading - this.state.heading);
+            // if (diff > 180) {
+            //     diff = 360 - diff;
+            // }
+            // if (diff < 90) { return ;}
             this.setState({ heading: heading.heading });
+            CompassHeading.stop();
         });
     }
 
@@ -92,7 +93,6 @@ export default class App extends Component {
             console.log('[버튼] 사진을 얻었음 :', imageURL);
             this.placeAPI.SetData(imageURL, gps.lat, gps.lng);
             let data = await this.placeAPI.GetPlace();
-            // let data = await this.placeAPI.GetPlaceList();
 
             if (!data) {
                 console.log('[버튼] 인식에 실패해 인접 장소를 검색함');
