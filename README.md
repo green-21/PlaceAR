@@ -1,6 +1,14 @@
 # PlaceAR
 AR 기반의 주변 장소 검색 앱
 
+<img src="https://github.com/green-21/PlaceAR/assets/75987694/bc7d00a9-3330-4718-9330-59a221a23f5d"  width="250" height="500">
+<img src="https://github.com/green-21/PlaceAR/assets/75987694/3af39476-fb6c-4bde-a036-5a4a67a1e1a9"  width="250" height="500">
+<img src="https://github.com/green-21/PlaceAR/assets/75987694/d5d1c607-8185-43da-9ae3-067a6bcdb15c"  width="250" height="500">
+<img src="https://github.com/green-21/PlaceAR/assets/75987694/c3809817-4d51-40d9-82e3-d3d8a6a34570"  width="250" height="500"> 
+&nbsp;  
+&nbsp;
+&nbsp;  
+   
 
 # Setting
 ## 기본 환경 설정
